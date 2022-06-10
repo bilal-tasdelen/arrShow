@@ -223,6 +223,13 @@ classdef asCursorPosClass < handle
             if pos(2) > dimX
                 pos(2) = dimX;
             end
+
+            if pos(1) < 0
+                pos(1) = 1;
+            end
+            if pos(2) < 0
+                pos(2) = 1;
+            end
             
             % get shortcuts to x and y positions
             posY = pos(1);

@@ -677,12 +677,12 @@ classdef arrShow < handle
             delete(rect);
             
             % print helpFigure
-            ph = printpreview(helpFigure);
+            printpreview(helpFigure);
             
             % wait until print dialog is closed
-            while(ishandle(ph))
-                pause(0.1);
-            end
+%             while(ishandle(ph))
+%                 pause(0.1);
+%             end
             
             % ...and close the help figure
             if ishandle(helpFigure)
