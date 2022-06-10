@@ -224,10 +224,10 @@ classdef asCursorPosClass < handle
                 pos(2) = dimX;
             end
 
-            if pos(1) < 0
+            if pos(1) < 1
                 pos(1) = 1;
             end
-            if pos(2) < 0
+            if pos(2) < 1
                 pos(2) = 1;
             end
             

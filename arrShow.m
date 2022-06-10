@@ -107,6 +107,8 @@ classdef arrShow < handle
         mouse_wheel_zoom_factor = 1.5;      % default zoom factor per mouse wheel step
         
         processingCallback           = false;
+
+        mouseMovementCbTime = uint64(0);
         
         forceComplexRepresentation = true;  % use phase overlay in complex mode even if imaginary part
         % of the frame is zero at every point
@@ -4056,6 +4058,7 @@ classdef arrShow < handle
             
             if ~obj.processingCallback
                 obj.processingCallback = true;
+                obj.mouseMovementCbTime = tic;
                 
                 if obj.mouseMovementMode == 0
                     % normal mode: just update the cursor position
@@ -4118,6 +4121,11 @@ classdef arrShow < handle
                     end                        
                 end
                 obj.processingCallback = false;
+            else
+                if toc(obj.mouseMovementCbTime) > 1e-1
+                    obj.processingCallback = false; % Cb stuck for some reason
+                    warning('Dbg: Mouse movement callback got stuck.')
+                end
             end
         end
         
