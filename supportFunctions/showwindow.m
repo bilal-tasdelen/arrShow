@@ -63,7 +63,7 @@ if ~ispc
     return;
 end
 
-if ~libisloaded(mfilename);
+if ~libisloaded(mfilename)
     loadlibrary('user32.dll',@userproto,'alias',mfilename);
 end
 

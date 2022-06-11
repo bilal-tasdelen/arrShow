@@ -836,7 +836,7 @@ function el = elementsNotInArr2(arr1, arr2)
 l1 = length(arr1);
 l2 = length(arr2);
 for i = 1 : l1
-    for j = 1 : l2;
+    for j = 1 : l2
         if arr1(i) == arr2(j)
             arr1(i) = -1;
         end

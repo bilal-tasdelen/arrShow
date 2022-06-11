@@ -1,6 +1,6 @@
 function asMarkPixel(asObjsOrPos, pos)
 
-if isa(asObjsOrPos,'arrShow');
+if isa(asObjsOrPos,'arrShow')
     if nargin < 2
         error('asMarkPixel:missingArgument','Need position vector');
     end

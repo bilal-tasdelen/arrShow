@@ -670,7 +670,7 @@ classdef asValueChangerClass < handle
         function vStr = validateStr(obj,str)
             
             % check if the string contains 'cnt' (center)
-            cntPos = findstr(str,'cnt');
+            cntPos = strfind(str,'cnt');
             if cntPos > 0
                 % replace 'cnt' by max/2
                 str1 = str(1:cntPos-1);
@@ -679,7 +679,7 @@ classdef asValueChangerClass < handle
             end
             
             % check if the string contains 'end'
-            endPos = findstr(str,'end');
+            endPos = strfind(str,'end');
             if endPos > 0
                 % replace 'end' by max
                 str1 = str(1:endPos-1);
@@ -689,7 +689,7 @@ classdef asValueChangerClass < handle
             
             
             % check if the string contains '/'
-            slPos = findstr(str,'/');
+            slPos = strfind(str,'/');
             if slPos > 0
                 if obj.offset
                     % offsets are not yet allowed for address ranges
@@ -718,7 +718,7 @@ classdef asValueChangerClass < handle
             
             
             % check if the string contains a colon
-            colPos = findstr(str,':');
+            colPos = strfind(str,':');
             
             if isempty(colPos)
                 % we have no colon at all...

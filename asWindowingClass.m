@@ -583,7 +583,7 @@ classdef asWindowingClass < handle
             % arrayShow instances)
             hJScrollBar = findjobj('depth',19,'nomenu','Class','Slider');
             hJScrollBar(1).AdjustmentValueChangedCallback = @(src, evnt)obj.sliderCb;
-            hJScrollBar(2).AdjustmentValueChangedCallback = @(src, evnt)obj.sliderCb; %#ok<NASGU> it is used :)
+            hJScrollBar(2).AdjustmentValueChangedCallback = @(src, evnt)obj.sliderCb; % it is used :)
             clear('hJScrollBar');
         end
         
@@ -672,10 +672,9 @@ classdef asWindowingClass < handle
                 if apply2relatives
                     if obj.sendAbsWindow
                         obj.apply2allCb('window.setCW',false, CW, adaptLimits,false);
-                    else if obj.sendRelWindow
-                            relCW = obj.getRelCW;
-                            obj.apply2allCb('window.setRelCW', false, relCW, adaptLimits, false);
-                        end
+                    elseif obj.sendRelWindow
+                        relCW = obj.getRelCW;
+                        obj.apply2allCb('window.setRelCW', false, relCW, adaptLimits, false);
                     end
                 end
             end
@@ -1053,10 +1052,9 @@ classdef asWindowingClass < handle
             % apply to relatives
             if obj.sendAbsWindow
                 obj.apply2allCb('window.setCW',false, [currCenter, currWidth]);
-            else if obj.sendRelWindow
-                    relCW = obj.getRelCW;
-                    obj.apply2allCb('window.setRelCW', false, relCW);
-                end
+            elseif obj.sendRelWindow
+                relCW = obj.getRelCW;
+                obj.apply2allCb('window.setRelCW', false, relCW);
             end
             
             
