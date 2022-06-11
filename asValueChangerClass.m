@@ -525,7 +525,7 @@ classdef asValueChangerClass < handle
             % add the offset to the value in the string (to keep the
             % actually selected frame constant)
             origSel = str2double(origSelStr);
-            if isnan(origSel);
+            if isnan(origSel)
                 % if the current selection cannot be transformed into a
                 % double, just address the first frame by default
                 newSel = 1 - offs;
@@ -788,7 +788,7 @@ classdef asValueChangerClass < handle
             if nr > obj.max
                 nr = obj.max;
             else
-                if nr < obj.min;
+                if nr < obj.min
                     nr = obj.min;
                 end
             end

@@ -62,7 +62,7 @@ classdef asCursorPosClass < handle
         asObj = [];
     end
     
-    methods (Access = public);
+    methods (Access = public)
         function obj = asCursorPosClass(...
                 parentFigureHandle,...
                 parentPanelHandle,...
@@ -118,7 +118,7 @@ classdef asCursorPosClass < handle
                     try
                         num2str(2.3,newPrec);
                     catch me
-                        if strcmp(me.identifier, 'MATLAB:num2str:fmtInvalid');
+                        if strcmp(me.identifier, 'MATLAB:num2str:fmtInvalid')
                             fprintf('Invalid precision string format\n');
                             newPrec = [];
                             % promt for reenter
@@ -485,7 +485,7 @@ classdef asCursorPosClass < handle
             else
                 if pw > 6
                     % reduced mode (3 panels)
-                    if obj.complexMode;
+                    if obj.complexMode
                         createPanel = [1, 0, 0, 1, 1];
                         %             [P, R, I, A, P]
                     else
@@ -495,7 +495,7 @@ classdef asCursorPosClass < handle
                 else
                     if pw > 4
                         % reduced mode (2 panels)
-                        if obj.complexMode;
+                        if obj.complexMode
                             createPanel = [1, 0, 0, 1, 0];
                             %             [P, R, I, A, P]
                         else
@@ -504,7 +504,7 @@ classdef asCursorPosClass < handle
                         end
                     else                    
                         % single mode (only 1 panel)
-                        if obj.complexMode;
+                        if obj.complexMode
                             createPanel = [0, 0, 0, 1, 0];
                             %             [P, R, I, A, P]
                         else

@@ -75,8 +75,8 @@ classdef asSelectionClass < handle
                         otherwise
                             warning('asSelectionClass:unknownOption',...
                                 'unknown option [%s]!\n',option);
-                    end;
-                end;
+                    end
+                end
             end
             
                                     
@@ -213,7 +213,7 @@ classdef asSelectionClass < handle
                 if retNumAsStr
                     addr{i} = str;
                 else
-                    [num,sflag] = str2num(str); %#ok<ST2NM> str is not necessarily a scalar
+                    [num,sflag] = str2num(str); % str is not necessarily a scalar
                     if sflag == 0
                         addr{i} = str;
                     else

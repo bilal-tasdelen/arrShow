@@ -187,9 +187,9 @@ classdef asDataClass < handle
 
                 obj.dat = permute(obj.dat,newOrder);
                 if k == 1
-                    obj.dat = flipdim(obj.dat,colDims(1));
+                    obj.dat = flip(obj.dat,colDims(1));
                 else
-                    obj.dat = flipdim(obj.dat,colDims(2));
+                    obj.dat = flip(obj.dat,colDims(2));
                 end
 
 
@@ -203,7 +203,7 @@ classdef asDataClass < handle
         
         function flipDim(obj,dim)
             if obj.enableDestrFun
-                obj.dat = flipdim(obj.dat,dim);
+                obj.dat = flip(obj.dat,dim);
                 obj.updFig();
             end
         end
@@ -328,7 +328,7 @@ classdef asDataClass < handle
             end
             
             % make sure that there is a semicolon at the end of the string
-            if ~any(strfind(str,';'));
+            if ~any(strfind(str,';'))
                 str = [str,';'];
             end
             
@@ -691,7 +691,7 @@ classdef asDataClass < handle
                 error('asDataClass:validateImageArray','input dataArrayay has to be at least 2 dimensional');
             end
             
-            if issparse(dataArray);
+            if issparse(dataArray)
                 dataArray = full(dataArray);
             end
             

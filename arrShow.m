@@ -166,7 +166,7 @@ classdef arrShow < handle
         MARKER_COL_REAL= 'yellow'; % default marker color for real valued images
     end
     
-    properties (Access = private);
+    properties (Access = private)
         updFigCount = 0;    % counter for updateFig calls for
                             % debugging and speed improvements
         
@@ -260,8 +260,8 @@ classdef arrShow < handle
                             
                         otherwise
                             error('arrShow:varargin','unknown option [%s]!\n',option);
-                    end;
-                end;
+                    end
+                end
                 clear('option','option_value');
                 clear('varargin');
                 % If we don't explicitly delete it here,
@@ -619,7 +619,7 @@ classdef arrShow < handle
             end
             
             if obj.roiExists()
-                if obj.roi.getSendPositionToggle();
+                if obj.roi.getSendPositionToggle()
                     obj.roi.callSendPositionCallback;
                 end
             end
@@ -787,7 +787,7 @@ classdef arrShow < handle
 
             % loop through all frames in the export dimension
             obj.selection.setCurrentVcValue(1);
-            for i = 1 : dims(dim);
+            for i = 1 : dims(dim)
                 if createMovie
                     obj.exportCurrentImage(vwObj,...
                         screenshot, includePanels, includeCursor, scrshotPauseTime);
@@ -917,7 +917,7 @@ classdef arrShow < handle
                     return;
                 end                
 
-                if exist(filenameOrVideoWriterObj,'file');
+                if exist(filenameOrVideoWriterObj,'file')
                     fprintf('Fig. %d: overwriting existing file: %s\n',obj.getFigureNumber, filenameOrVideoWriterObj);
                 end                
             end
@@ -1085,7 +1085,7 @@ classdef arrShow < handle
                 
                 % windowing
                 cmap = obj.getColormap;
-                if isnumeric(cmap);
+                if isnumeric(cmap)
                     cmap = 'custom';
                 end
                 
@@ -1129,7 +1129,7 @@ classdef arrShow < handle
                 
                 
                 % write everything to the text file
-                for i = 1 : size(text,1);
+                for i = 1 : size(text,1)
                     fprintf(fid,'%s\n',text{i});
                 end
                 
@@ -1173,7 +1173,7 @@ classdef arrShow < handle
                 end
                 
                 % check if file already exists
-                if exist(filename,'file');
+                if exist(filename,'file')
                     fprintf('Fig. %d: overwriting existing file: %s\n',obj.getFigureNumber(), filename);
                 end
                 
@@ -1764,7 +1764,7 @@ classdef arrShow < handle
                 file = [fpath, fname];
             end
             if ~isempty(file) && ~isa(file,'double')
-                cm = colormap(obj.fh); %#ok<NASGU> the value is used in the save command
+                cm = colormap(obj.fh); % the value is used in the save command
                 save(file,'cm');
             end
         end
@@ -1780,7 +1780,7 @@ classdef arrShow < handle
             end
             if ~isempty(file)
                 cm = load(file,'cm');
-                if isfield(cm,'cm');
+                if isfield(cm,'cm')
                     obj.setColormap(cm.cm);
                 end
             end
@@ -2566,10 +2566,10 @@ classdef arrShow < handle
             
             % check, if the image is selected (these lines were sufficient
             % in matlab versions prior 2014b)            
-            if strcmp(get(selectedUiObj,'Type'), 'image');
+            if strcmp(get(selectedUiObj,'Type'), 'image')
                 bool = true;
                 imageHandle = selectedUiObj;
-            elseif(strcmp(get(selectedUiObj,'Type'), 'rectangle'));
+            elseif(strcmp(get(selectedUiObj,'Type'), 'rectangle'))
                 % ...and here comes the ugly part:
                 % try to get the selected image from the childs of the
                 % parent of the rectangle...
@@ -2773,7 +2773,7 @@ classdef arrShow < handle
                     fprintf('Surface plot currently works on single images.\n');
                     return
                 end
-                if isa(imgs,'single');                    
+                if isa(imgs,'single')                    
                     imgs = double(imgs);
                     fprintf('Surface plot don''t work with single precision images. Converting to double...\n');
                     %...this holds true at least for matlab R2013a
@@ -3405,7 +3405,7 @@ classdef arrShow < handle
             
             % get the toggle state of 'keep aspect ratio' context menu
             % entry
-            switch get(obj.mbh.aspectRatio,'Checked');
+            switch get(obj.mbh.aspectRatio,'Checked')
                 case 'on'
                     aspectRatio = true;
                 case 'off'
@@ -3619,7 +3619,7 @@ classdef arrShow < handle
         end
         
         function errorHandlerInvalidData(obj, ME)
-            if any(strfind(ME.identifier,'ExpectedFinite')) || ~obj.processingError;
+            if any(strfind(ME.identifier,'ExpectedFinite')) || ~obj.processingError
                 % apparently there are invalid values in the data
                 fprintf('DATA CONTAINS INFINITE VALUES.\nFORCING FULL DATA INSPECTION...');
 
@@ -3939,7 +3939,7 @@ classdef arrShow < handle
                         % check if the current axes has changed
                         currAxes = get(imageHandle,'Parent');
                         lastAxes = obj.window.getAxesHandle();
-                        if currAxes ~= lastAxes;
+                        if currAxes ~= lastAxes
                             % if so:
                             % delete cursor rectangle from last Axes
                             ud = get(lastAxes,'UserData');
@@ -3970,7 +3970,7 @@ classdef arrShow < handle
                     % check if we did a middle-button click on the image
                     [bool, imageHandle] = obj.isImageSelected();
                     
-                    if bool && obj.window.getIsEnabled();
+                    if bool && obj.window.getIsEnabled()
                         
                         % assure that the windowClass is linked to the
                         % clicked image
@@ -4001,7 +4001,7 @@ classdef arrShow < handle
                     end
                     
                 case 'open' %double click
-                    if obj.window.getIsEnabled();                        
+                    if obj.window.getIsEnabled()                        
                         obj.window.resetWindowing();
                         obj.mouseMovementMode = 0; 
                         obj.equalizeWindowing();
@@ -4023,7 +4023,7 @@ classdef arrShow < handle
             if strcmp(get(src,'SelectionType'), 'extend')                
                 % ...and for multiframe views:
                 % update the windowing of all frames
-                if  obj.window.getIsEnabled();
+                if  obj.window.getIsEnabled()
                     obj.equalizeWindowing();
                 end
             end
@@ -4066,7 +4066,7 @@ classdef arrShow < handle
                         currAxes = get(obj.ih(i),'Parent');
                         position = get(currAxes,'CurrentPoint');
 
-                        if arrShow.mouseInsideAxes(position, currAxes);
+                        if arrShow.mouseInsideAxes(position, currAxes)
                             x = round(position(1,1));
                             y = round(position(1,2));
 
@@ -4203,7 +4203,7 @@ classdef arrShow < handle
             
             global asObjs;
             
-            if isa(arr,'arrShow');
+            if isa(arr,'arrShow')
                 newObj = arr.rebuildObject(varargin{:});
             else
                 if  isa(arr,'arrShow2') || isa(arr,'arrShow3')
