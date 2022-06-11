@@ -401,9 +401,9 @@ classdef asMarkerClass < handle
                 P = pos(:,i);
                 switch obj.style
                     case 1
-                        % impoint
-                        markerHandles{i} = impoint(ah,P(2),P(1));
-                        markerHandles{i}.setColor(obj.color);
+                        % drawpoint
+                        markerHandles{i} = drawpoint(ah, 'Position', [P(2),P(1)], ...
+                            'Color',obj.color);
                     case 2
                         % rectangle
                         markerHandles{i} = rectangle('Parent',ah,'Position',[P(2)-.5, P(1)-.5, 1,1],'Curvature',[0,0],...
