@@ -3224,6 +3224,7 @@ classdef arrShow < handle
                 uimenu(menuHandle,'Label','Parula'      ,'callback',@(src,evnt)cb('parula(256)'));
             end
             uimenu(menuHandle,'Label','HSV'          ,'callback' ,@(src,evnt)cb('hsv(256)'));
+            uimenu(menuHandle,'Label','Turbo'        ,'callback' ,@(src,evnt)cb('turbo(256)'));
             uimenu(menuHandle,'Label','Hot'          ,'callback' ,@(src,evnt)cb('hot(256)'));
             uimenu(menuHandle,'Label','Cool'         ,'callback' ,@(src,evnt)cb('cool(256)'));
             uimenu(menuHandle,'Label','Spring'       ,'callback' ,@(src,evnt)cb('spring(256)'));
