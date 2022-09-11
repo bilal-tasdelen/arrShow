@@ -112,7 +112,9 @@ classdef asRoiClass < impoly
         
         function str = getMeanAndStdString(obj)
             [m, s] = obj.getMeanAndStd;           
-            str = [num2str(m,obj.precision), ' +- ', num2str(s,obj.precision)];
+%             str = [num2str(m,obj.precision), ' +- ', num2str(s,obj.precision)];
+            str = sprintf('\\mu \\pm \\sigma = %g \\pm %g', m, s);
+
         end
 
         function drawMeanAndStdString(obj)
@@ -123,7 +125,8 @@ classdef asRoiClass < impoly
             obj.textHandle = text(.015,.99,obj.getMeanAndStdString,'Units','normalized','parent',obj.parentAxesHandle,...
                 'Color','green','BackgroundColor','Black',...
                 'VerticalAlignment','top',...
-                'UIContextMenu',obj.textContextMenuHandle);            
+                'UIContextMenu',obj.textContextMenuHandle, 'Interpreter', 'latex', ...
+                'FontSize', 18);            
         end
 
         function drawFullString(obj)
@@ -131,11 +134,13 @@ classdef asRoiClass < impoly
             if ~isempty(obj.textHandle)
                 delete(obj.textHandle);
             end
-            str = strvcat(obj.getMeanAndStdString,num2str(obj.getN),num2str(obj.getMin,obj.precision),num2str(obj.getMax,obj.precision));
+            minmax_str = sprintf('(min, max) = (%g, %g)', obj.getMin, obj.getMax);
+            str = char(obj.getMeanAndStdString, ...
+                ['N = ', num2str(obj.getN)], minmax_str);
             obj.textHandle = text(.015,.98,str,'Units','normalized','parent',obj.parentAxesHandle,...
-                'Color','green','BackgroundColor','Black',...
+                'Color','green', ... %'BackgroundColor','Black',...
                 'VerticalAlignment','top',...
-                'UIContextMenu',obj.textContextMenuHandle);            
+                'UIContextMenu',obj.textContextMenuHandle, 'FontSize', 14);            
         end
         
         function h = getTextHandle(obj)
