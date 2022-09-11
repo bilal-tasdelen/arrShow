@@ -821,7 +821,7 @@ classdef arrShow < handle
                 dim = [];
             end
             obj.batchExportDimension(dim, [], true, framerate, ...
-                [],[],[],[],movieType);
+                true,false,false,false,movieType);
         end
         
         function img = getScreenshot(obj, includePanels, includeCursor, scrshotPauseTime)
@@ -1186,14 +1186,23 @@ classdef arrShow < handle
                 % create a help figure without menues
                 helpFigure = figure('MenuBar','none',...
                     'ToolBar','none');
-                set(helpFigure,'Units','pixel','position',[800,300,50,300])
+                set(helpFigure,'Units','pixel','position',[800,300,100,300])
                 colormap(obj.getColormap('current',true));
                 
                 % copy current axes to the help figure
                 helpAxes = copyobj([ch,ah],helpFigure);
-                set(helpAxes,'Units','normalized','position',[0.3,0.1,.05,0.8])
+                
+                for cc = 1:length(helpAxes(2).Children)
+                    if isprop(helpAxes(2).Children(cc), 'String')
+                        delete(helpAxes(2).Children(cc))
+                        break;
+                    end
+                end
+
+                set(helpAxes,'Units','normalized','position',[0.4,0.1,.1,0.8])
                 
                 set(helpAxes,'fontsize',14)
+                
                 
                 % write image to file
                 try
