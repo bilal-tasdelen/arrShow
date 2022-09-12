@@ -17,6 +17,7 @@ classdef asRoiClass < impoly
         sendPositionCallbackId = [];
         
         fullStrToggle = true;  % show full string or just compact form
+        txtbg = true;
     end
     
     properties (Access = public)
@@ -138,9 +139,9 @@ classdef asRoiClass < impoly
             str = char(obj.getMeanAndStdString, ...
                 ['N = ', num2str(obj.getN)], minmax_str);
             obj.textHandle = text(.015,.98,str,'Units','normalized','parent',obj.parentAxesHandle,...
-                'Color','green', ... %'BackgroundColor','Black',...
+                'Color',obj.getColor(),'BackgroundColor','Black',...
                 'VerticalAlignment','top',...
-                'UIContextMenu',obj.textContextMenuHandle, 'FontSize', 14);            
+                'UIContextMenu',obj.textContextMenuHandle, 'FontSize', 14);  
         end
         
         function h = getTextHandle(obj)
@@ -280,6 +281,8 @@ classdef asRoiClass < impoly
                     'callback',@(src,evnt)obj.setNotation('%2.2e'));
                 uimenu(obj.textContextMenuHandle,'Label','Compact exponential notation'   ,...
                     'callback',@(src,evnt)obj.setNotation('%g'));
+                uimenu(obj.textContextMenuHandle,'Label','Toggle background'   ,...
+                    'callback',@(src,evnt)obj.toggleBackground());
                 
             end                                    
         end
@@ -287,6 +290,17 @@ classdef asRoiClass < impoly
         function setNotation(obj, precision)
             obj.precision = precision;
             obj.updateRoiString % update text
+        end
+
+        function toggleBackground(obj)
+
+            if obj.txtbg
+                set(obj.textHandle, 'BackgroundColor', 'black')
+            else
+                set(obj.textHandle, 'BackgroundColor', 'none')
+            end
+            obj.txtbg = ~obj.txtbg;
+
         end
                     
     end
