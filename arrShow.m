@@ -2324,21 +2324,22 @@ classdef arrShow < handle
                         delete(obj.roi);
                         center = roiPos(1,:);   % first point defines center
                         radius = sqrt(sum((roiPos(1,:)-roiPos(2,:)).^2));   % distance between points defines radius
-                        if radius > 21          % limit Number of new points N
-                            N = 32;
-                        elseif radius < 5       % set at least 8 new points
-                            N = 8;
-                        else
-                            N=round(1.5*radius);
-                            if mod(N,2) == 1    % prefer symmetric roi
-                                N = N+1;
-                            end
-                        end
-                        roiPos = zeros(N,2);    % set new points
-                        for i = 1:N
-                            phi = i*2*pi/N;
-                            roiPos(i,:) = center+radius.*[sin(phi) cos(phi)];
-                        end
+%                         if radius > 21          % limit Number of new points N
+%                             N = 32;
+%                         elseif radius < 5       % set at least 8 new points
+%                             N = 8;
+%                         else
+%                             N=round(1.5*radius);
+%                             if mod(N,2) == 1    % prefer symmetric roi
+%                                 N = N+1;
+%                             end
+%                         end
+%                         roiPos = zeros(N,2);    % set new points
+%                         for i = 1:N
+%                             phi = i*2*pi/N;
+%                             roiPos(i,:) = center+radius.*[sin(phi) cos(phi)];
+%                         end
+                        roiPos(2,:) = radius;
                         obj.roi = asRoiClass(obj.getCurrentAxesHandle,roiPos,...
                             @obj.roiCallback);
                 end
