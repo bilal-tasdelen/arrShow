@@ -1,4 +1,4 @@
-classdef asRoiClass < impoly
+classdef asRoiClass < handle
     properties (Access = private)
         parentAxesHandle   = 0;     % parent axes handle
         parentImageHandle  = 0;     % parent image handle
@@ -11,7 +11,7 @@ classdef asRoiClass < impoly
         filterStr = ''      % WARNING: test
         
         guiHandle    = struct('figure','text')   
-        cmenuHandle  = struct('sendPosition','ignoreZeros');
+        cmenuHandle  = struct('sendPosition', 0,'ignoreZeros', 0);
         
         sendPositionCallback = [];
         sendPositionCallbackId = [];
@@ -21,7 +21,7 @@ classdef asRoiClass < impoly
     end
     
     properties (Access = public)
-
+        objPoly = images.roi.Polygon.empty;
     end
     
     methods
@@ -33,8 +33,18 @@ classdef asRoiClass < impoly
                 end                
             end
             
-            obj     = obj@impoly(parentAxesHandle, roiPos);
-            obj.setColor('green')
+%             obj.objPoly = images.roi.Polygon(parentAxesHandle, 'Color', 'green');
+            if isempty(roiPos)
+                obj.objPoly = drawpolygon(parentAxesHandle, 'Color', 'green');
+
+            elseif numel(roiPos) == 4
+                obj.objPoly = drawcircle(parentAxesHandle, 'Center', roiPos(1,:),...
+                    'Radius', roiPos(2,1), 'Color', 'green');
+            else
+                obj.objPoly = drawpolygon(parentAxesHandle, 'Position', roiPos, 'Color', 'green');
+            end
+%             obj     = obj@impoly(parentAxesHandle, roiPos);
+%             obj.setColor('green')
             obj.parentAxesHandle   = parentAxesHandle;
             obj.parentImageHandle  = findall(get(parentAxesHandle,'Children'),'Type','image');
             obj.parentFigureHandle = get(get(obj.parentAxesHandle,'Parent'),'Parent');
@@ -48,11 +58,29 @@ classdef asRoiClass < impoly
             
 %             addNewPositionCallback(obj,@(pos)obj.showRoiGui);
 %             obj.showRoiGui;
-            addNewPositionCallback(obj,@(pos)obj.updateRoiString);
+%             addNewPositionCallback(obj.objPoly,@(pos)obj.updateRoiString);
+            addlistener(obj.objPoly,'MovingROI',@obj.allevents);
             obj.updateRoiString;
+
+
+        end
+
             
+        function allevents(obj, src, evt, ~)
+            evname = evt.EventName;
 
-
+            switch(evname)
+                case{'MovingROI'}
+%                     disp(['ROI moving previous position: ' mat2str(evt.PreviousPosition)]);
+%                     disp(['ROI moving current position: ' mat2str(evt.CurrentPosition)]);
+                    obj.updateRoiString();
+                    if obj.getSendPositionToggle
+                        obj.callSendPositionCallback();
+                    end
+                case{'ROIMoved'}
+%                     disp(['ROI moved previous position: ' mat2str(evt.PreviousPosition)]);
+                    disp(['ROI moved current position: ' mat2str(evt.CurrentPosition)]);
+            end
         end
                        
         function roi = getRoiData(obj)
@@ -66,7 +94,7 @@ classdef asRoiClass < impoly
                     refImg = get(obj.parentImageHandle,'CData');
                 end
             end
-            mask   = obj.createMask;
+            mask   = obj.objPoly.createMask;
             roi    = refImg(mask == 1);
             if obj.getIgnoreZerosToggle
                 roi = roi(roi~=0);
@@ -77,6 +105,15 @@ classdef asRoiClass < impoly
             
         end
         
+        function pos = getPosition(obj)
+            pos = obj.objPoly.Position;
+        end
+
+        function pos = setPosition(obj, pos)
+           obj.objPoly.Position = pos;
+           obj.updateRoiString;
+        end
+
         function copyPosition(obj)
             clipboard('copy',asRoiClass.pos2lineStr(obj.getPosition()));
         end
@@ -139,7 +176,7 @@ classdef asRoiClass < impoly
             str = char(obj.getMeanAndStdString, ...
                 ['N = ', num2str(obj.getN)], minmax_str);
             obj.textHandle = text(.015,.98,str,'Units','normalized','parent',obj.parentAxesHandle,...
-                'Color',obj.getColor(),'BackgroundColor','Black',...
+                'Color',obj.objPoly.Color(),'BackgroundColor','Black',...
                 'VerticalAlignment','top',...
                 'UIContextMenu',obj.textContextMenuHandle, 'FontSize', 14);  
         end
@@ -180,7 +217,8 @@ classdef asRoiClass < impoly
             end
             if ~isempty(obj.textHandle) && ishandle(obj.textHandle)
                 delete(obj.textHandle);
-            end                        
+            end
+            obj.objPoly.delete();
         end
             
         function toggle = getSendPositionToggle(obj)
@@ -209,11 +247,15 @@ classdef asRoiClass < impoly
             switch toggle
                 case 1
                     set(obj.cmenuHandle.sendPosition,'Checked','on');                    
-                    obj.sendPositionCallbackId = addNewPositionCallback(obj,obj.sendPositionCallback);                    
+%                     obj.sendPositionCallbackId = addNewPositionCallback(obj,obj.sendPositionCallback);
+%                     obj.sendPositionCallbackId = addlistener(obj.objPoly,'MovingROI', @obj.sendPositionCallback);
+%                     addlistener(obj.objPoly,'MovingROI',@obj.allevents);
+
+
                     obj.callSendPositionCallback(); % execute callback once
                 case 0
                     set(obj.cmenuHandle.sendPosition,'Checked','off');
-                    removeNewPositionCallback(obj,obj.sendPositionCallbackId);                                        
+%                     removeNewPositionCallback(obj,obj.sendPositionCallbackId);                                        
             end
         end
         
@@ -246,9 +288,8 @@ classdef asRoiClass < impoly
     methods (Access = private)
         function updateImpolyContextMenu(obj)
             % add some features to the impoly context menu
-            
-            cmh = obj.getContextMenu;
-            
+            cmh = obj.objPoly.ContextMenu;
+
             uimenu(cmh,'Label','Delete ROI'   ,...
                 'callback',@(src,evnt)obj.delete);
             
@@ -263,7 +304,7 @@ classdef asRoiClass < impoly
             obj.cmenuHandle.ignoreZeros = uimenu(cmh,'Label','Ignore Zeros'   ,...
                 'callback',@(src,evnt)obj.setIgnoreZerosToggle,...
                 'Checked','on');
-            
+           
         end
 
         function createTextContextMenu(obj)
