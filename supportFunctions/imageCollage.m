@@ -52,8 +52,10 @@ for n=1:noFrames
     x0 = mod((n-1),nCols)  * colWidth + xBorder2;
     y0 = fHeight - colHeight - (floor((n-1)/nCols) * colHeight) - yBorder2;
     
-    ah = axes('Parent',parentPanelH,'units','pixel','position',[x0, y0, colWidth, colHeight]);
-    
+    ah = axes('Parent',parentPanelH,'units','pixel'...
+        ,'position',[x0, y0, colWidth, colHeight], ...
+        'YDir','reverse');
+
     if keepTrueSize
         pixelPos = get(ah,'position');
         set(ah,'position',[pixelPos(1:2), dimY, dimX]);
