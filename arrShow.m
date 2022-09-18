@@ -1386,79 +1386,81 @@ classdef arrShow < handle
                     return;
                 end
                 
-                % get axis handle
-                ah = obj.getCurrentAxesHandle;
-                
-                % get image dimensions
-                dim = obj.statistics.getDimensions;
-                
-                if numel(z) == 4
-                    % assume z to be a matrix with ylim and xlim
-                    if all(size(z) == [2,2])
-                        % limit the new FOV to the image size
-                        z = min(z, [dim(1),dim(1);dim(2),dim(2)]+0.5);
-                        z = max(z,0.5 * ones(2));
-                        if any(diff(z,[],2) <0.5)
-                            disp('invalid zoom');
-                            return;
+                for im_i=1:length(obj.ih)
+                    % get axis handle
+%                     ah = obj.getCurrentAxesHandle;
+                    ah = get(obj.ih(im_i),'Parent');
+                    % get image dimensions
+                    dim = obj.statistics.getDimensions;
+                    
+                    if numel(z) == 4
+                        % assume z to be a matrix with ylim and xlim
+                        if all(size(z) == [2,2])
+                            % limit the new FOV to the image size
+                            z = min(z, [dim(1),dim(1);dim(2),dim(2)]+0.5);
+                            z = max(z,0.5 * ones(2));
+                            if any(diff(z,[],2) <0.5)
+                                disp('invalid zoom');
+                                return;
+                            end
+                            ylim(ah,z(1,:));
+                            xlim(ah,z(2,:));
+%                             return;
                         end
-                        ylim(ah,z(1,:));
-                        xlim(ah,z(2,:));
-                        return;
-                    end
-                else
-                    % assume z to contain zoom factors
-                    
-                    % replicate scalar zoom factor to be 2 dimensional
-                    if isscalar(z)
-                        z = [z,z];
-                    end
-                                        
-                    if sum(z) == 0 || resetFirst
-                        % reset zoom
-                        ylim(ah,0.5 + [0,dim(1)]);
-                        xlim(ah,0.5 + [0,dim(2)]);
-                    end
-                    
-                    if sum(z) ~= 0
-                        % get current FOV
-                        xl = get(ah,'XLim');
-                        yl = get(ah,'YLim');
+                    else
+                        % assume z to contain zoom factors
                         
-                        % width of the current FOV
-                        w = [ diff(yl), diff(xl)];
-                        
-                        % if not given, use the center point of the original image
-                        if nargin < 4 || isempty(centerPoint)
-                            centerPoint = dim/2;
+                        % replicate scalar zoom factor to be 2 dimensional
+                        if isscalar(z)
+                            z = [z,z];
+                        end
+                                            
+                        if sum(z) == 0 || resetFirst
+                            % reset zoom
+                            ylim(ah,0.5 + [0,dim(1)]);
+                            xlim(ah,0.5 + [0,dim(2)]);
                         end
                         
-                        % zoomed width
-                        w = w ./ z;
-                        
-                        % new FOV
-                        left  = centerPoint - w/2;
-                        right = centerPoint + w/2;
-                        
-                        % account for over- and undershoots
-                        overshoot  = right - dim;
-                        overshoot(overshoot < 0) = 0;
-                        left = left - overshoot;
-                        
-                        undershoot = left;
-                        undershoot(undershoot > 0) = 0;
-                        right = right - undershoot;
-                        
-                        newLims = [left;right];
-                        
-                        % limit the new FOV to the image size
-                        newLims = min(newLims, [dim;dim]);
-                        newLims = max(newLims,zeros(2));
-                        newLims = newLims + 0.5;
-                        
-                        % set new limits to axes handle
-                        set(ah,'XLim',newLims(:,2));
-                        set(ah,'YLim',newLims(:,1));
+                        if sum(z) ~= 0
+                            % get current FOV
+                            xl = get(ah,'XLim');
+                            yl = get(ah,'YLim');
+                            
+                            % width of the current FOV
+                            w = [ diff(yl), diff(xl)];
+                            
+                            % if not given, use the center point of the original image
+                            if nargin < 4 || isempty(centerPoint)
+                                centerPoint = dim/2;
+                            end
+                            
+                            % zoomed width
+                            w = w ./ z;
+                            
+                            % new FOV
+                            left  = centerPoint - w/2;
+                            right = centerPoint + w/2;
+                            
+                            % account for over- and undershoots
+                            overshoot  = right - dim;
+                            overshoot(overshoot < 0) = 0;
+                            left = left - overshoot;
+                            
+                            undershoot = left;
+                            undershoot(undershoot > 0) = 0;
+                            right = right - undershoot;
+                            
+                            newLims = [left;right];
+                            
+                            % limit the new FOV to the image size
+                            newLims = min(newLims, [dim;dim]);
+                            newLims = max(newLims,zeros(2));
+                            newLims = newLims + 0.5;
+                            
+                            % set new limits to axes handle
+                            set(ah,'XLim',newLims(:,2));
+                            set(ah,'YLim',newLims(:,1));
+                        end
                     end
                 end
             end
