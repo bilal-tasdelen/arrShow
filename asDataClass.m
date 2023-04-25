@@ -10,6 +10,7 @@ classdef asDataClass < handle
     
     properties (GetAccess = public, SetAccess = private)
         dat                  = [];   % the data dataArrayay
+        voxelAspectRatio     = [];   % Aspect ratio of the voxel
     end
     
     properties (Access = private)
@@ -45,6 +46,15 @@ classdef asDataClass < handle
             % store figure update callback to local property
             obj.updFig = figureUpdateCallback;
             
+        end
+        
+        function setAspectRatio(obj, ar)
+            obj.voxelAspectRatio = ar;
+        end
+        
+        function ar = getSelectionAspectRatio(obj)
+           ar = obj.voxelAspectRatio(obj.selection.getColonDims);
+           ar = [ar ones(1, 3-length(ar))];
         end
         
         function linkToSelectionClassObject(obj, selectionClassObject)
@@ -191,7 +201,7 @@ classdef asDataClass < handle
                 else
                     obj.dat = flip(obj.dat,colDims(2));
                 end
-
+                obj.setAspectRatio(obj.voxelAspectRatio(newOrder));
 
                 % valueChanger array
                 newDims = size(obj.dat);
@@ -513,6 +523,7 @@ classdef asDataClass < handle
 
             % permute array and selection
             obj.dat = permute(obj.dat,order);
+            obj.setAspectRatio(obj.voxelAspectRatio(order));
             sel = sel(order);
 
             si = size(obj.dat);

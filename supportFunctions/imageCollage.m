@@ -3,6 +3,7 @@ function [axesHandle, imageHandle] = imageCollage(...
     parentPanelH,...
     colorMap,...
     keepAspectRatio,...
+    voxelAspectRatio,...
     keepTrueSize,...
     useQuiver,...
     forceComplex)
@@ -26,11 +27,11 @@ fHeight = fpos(4);
 % width and height of every image
 nCols = ceil(sqrt(noFrames));
 nRows = ceil(noFrames / nCols);
-colHeight = floor(fHeight/nRows);
-colWidth  = floor(fWidth/nCols);
+colHeight = floor(voxelAspectRatio(1).*fHeight/nRows);
+colWidth  = floor(voxelAspectRatio(2).*fWidth/nCols);
 
 if keepAspectRatio % account for aspect ratio
-    imgRatio = dimY / dimX;
+    imgRatio = (voxelAspectRatio(1).*dimY) / (voxelAspectRatio(2).*dimX);
     colHeight = colWidth * imgRatio;
     if colHeight > floor(fHeight/nRows)
         colHeight = floor(fHeight/nRows);
@@ -99,7 +100,7 @@ for n=1:noFrames
         end    
     end
     if keepAspectRatio
-        set(ah,'DataAspectRatio',[1,1,1]);
+        set(ah,'DataAspectRatio', voxelAspectRatio);
     end
     
     axis(ah,'off');    

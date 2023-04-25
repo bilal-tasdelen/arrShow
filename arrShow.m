@@ -33,6 +33,8 @@ classdef arrShow < handle
         markers         = [];               % pixel markers
         sendGroup       = [];               % asSendGroupClass
         
+        voxelAspectRatio = [];              % Aspect ratio of shown pixels
+        
         UserData        = [];               % this is not used within this class
         % and may be set and
         % changed for arbitrary purpose
@@ -202,6 +204,7 @@ classdef arrShow < handle
             infoText = '';
             renderUi = true;
             viewMode = 'default'; % could be quiver (vector plot) as well
+            voxelAspectRatio = [];
             if nargin > 1
                 if length(varargin) ==1
                     obj.title = varargin{1};
@@ -257,7 +260,8 @@ classdef arrShow < handle
                             pixMarkers = option_value;
                         case {'viewmode','view','mode'} % view mode can be 'default' or 'quiver' (or equivalent: 'vector')
                             viewMode = option_value;
-                            
+                        case {'aspectratio'}
+                            voxelAspectRatio = option_value;
                         otherwise
                             error('arrShow:varargin','unknown option [%s]!\n',option);
                     end
@@ -269,6 +273,7 @@ classdef arrShow < handle
                 % object, wasting memory                
             end
             
+            
             % assure that all support function paths are registered
             arrShow.checkPath();
             
@@ -276,6 +281,11 @@ classdef arrShow < handle
             % initial data validity tests)
             obj.data = asDataClass(arr, @obj.updFig);
             si       = size(obj.data.dat);            
+            
+            % Complete aspect ratio if incomplete or no value is given
+            if length(voxelAspectRatio) < ndims(arr)
+               obj.data.setAspectRatio([voxelAspectRatio ones(1, ndims(arr)-length(voxelAspectRatio))]); 
+            end
             
             % store standard paths
             obj.arrShowPath = fileparts(mfilename('fullpath'));
@@ -3489,6 +3499,7 @@ classdef arrShow < handle
                     obj.fph,...     % figure panel handle
                     cMap,...        % colormap
                     aspectRatio,...
+                    obj.data.getSelectionAspectRatio(),...
                     trueSize,...
                     useQuiver,...
                     forceComplex);

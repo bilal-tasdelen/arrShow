@@ -120,6 +120,7 @@ classdef asSelectionClass < handle
                     tags(tag) = i;
                 end
             end
+            tags = tags(tags~=0); % TODO: Check if causes any dimensionality problem.
         end
         
         function setColonDim1(obj, id)
