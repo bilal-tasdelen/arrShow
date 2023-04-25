@@ -27,8 +27,8 @@ fHeight = fpos(4);
 % width and height of every image
 nCols = ceil(sqrt(noFrames));
 nRows = ceil(noFrames / nCols);
-colHeight = floor(voxelAspectRatio(1).*fHeight/nRows);
-colWidth  = floor(voxelAspectRatio(2).*fWidth/nCols);
+colHeight = floor(fHeight/nRows);
+colWidth  = floor(fWidth/nCols);
 
 if keepAspectRatio % account for aspect ratio
     imgRatio = (voxelAspectRatio(1).*dimY) / (voxelAspectRatio(2).*dimX);
