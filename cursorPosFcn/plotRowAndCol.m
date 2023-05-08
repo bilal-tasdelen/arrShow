@@ -14,7 +14,7 @@ end
 
 mi = asObj.statistics.getMin;
 ma = asObj.statistics.getMax;
-if ~isreal(mi);
+if ~isreal(mi)
     mi = min([real(mi), imag(mi)]);
     ma = max([real(ma), imag(ma)]);
 end
@@ -48,7 +48,7 @@ ah2 = asObj.UserData.rowPlotHandle;
 % create col plot
 x = 1 : size(img,2);
 cPlot(x, img(pos(1),:)','parent',ah1);
-ylim(ah1, yLimits);
+% ylim(ah1, yLimits);
 xlim(ah1, [1,size(img,2)]);
 ylabel(ah1, 'pixel intensity');
 xlabel(ah1, 'column');
@@ -61,7 +61,7 @@ y = 1 : size(img,1);
 cPlot(y, img(:,pos(2)),'parent',ah2);
 ylabel(ah2, 'pixel intensity');
 xlabel(ah2, 'row');
-ylim(ah2, yLimits);
+% ylim(ah2, yLimits);
 xlim(ah2, [1,size(img,1)]);
 end
 
