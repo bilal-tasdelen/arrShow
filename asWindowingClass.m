@@ -1174,6 +1174,8 @@ classdef asWindowingClass < handle
             % vector percentiles (to avoid the matlab prctile function
             % which requires a statistic toolbox liscense)
             
+            % Get rid of nans and infs
+            x = x(~isnan(x)&~isinf(x));
             % get number of elements in x
             N = numel(x);
 

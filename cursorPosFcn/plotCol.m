@@ -13,7 +13,7 @@ if numel(si) ~= 2 || si(1) == 1
     return
 end
 
-% figure;
+figure;
 cPlot(currImg(:,pos(2)));
 
 % create plot title
