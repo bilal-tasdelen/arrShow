@@ -284,7 +284,9 @@ classdef arrShow < handle
             
             % Complete aspect ratio if incomplete or no value is given
             if length(voxelAspectRatio) < ndims(arr)
-               obj.data.setAspectRatio([voxelAspectRatio ones(1, ndims(arr)-length(voxelAspectRatio))]); 
+               obj.data.setAspectRatio([voxelAspectRatio ones(1, ndims(arr)-length(voxelAspectRatio))]);
+            else
+                obj.data.setAspectRatio(voxelAspectRatio);
             end
             
             % store standard paths
